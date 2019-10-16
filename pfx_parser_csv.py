@@ -124,7 +124,7 @@ for i in range(delta.days+1):
         d_url = prior_d_url
 
     if d_url != prior_d_url:
-        day_soup = BeautifulSoup(urlopen(d_url))
+        day_soup = BeautifulSoup(urlopen(d_url), features='lxml')
         for game in day_soup.find_all('a', href=re.compile("gid_.*")):
             g = game.get_text().strip()
             if isinstance(g[len(g)-2:len(g)-1], int):
@@ -225,9 +225,9 @@ for i in range(delta.days+1):
             inning_pattern = 'inning_\d*.xml'
             try:
                 for inning in BeautifulSoup(
-                    urlopen(inn_url)).find_all('a',
-                                               href=re.compile(
-                                                   'inning_\d*.xml')):
+                    urlopen(inn_url),
+                    features='lxml').find_all('a',
+                                              href=re.compile(inning_pattern)):
                     inn_soup = BeautifulSoup(
                         urlopen(inn_url+inning.get_text().strip()), "lxml-xml")
                     inning_number = inn_soup.inning["num"]
